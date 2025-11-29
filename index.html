@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portafolio - Carlos Mendoza</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <style>
+      /* Variables de tema */
+      :root {
+        --bg-primary: #ffffff;
+        --bg-secondary: #f9f9f9;
+        --text-primary: #1a1a1a;
+        --text-secondary: #555555;
+        --accent: #2563eb;
+        --accent-light: #dbeafe;
+        --border-radius: 16px;
+        --shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      }
+
+      [data-theme="dark"] {
+        --bg-primary: #121212;
+        --bg-secondary: #1e1e1e;
+        --text-primary: #f0f0f0;
+        --text-secondary: #a0a0a0;
+        --accent: #60a5fa;
+        --accent-light: #1e293b;
+        --shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Reset y base */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.7;
+        transition: var(--transition);
+      }
+
+      /* Navegación */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 1.2rem 2rem;
+        background-color: var(--bg-secondary);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+      }
+
+      .logo {
+        font-weight: 800;
+        font-size: 1.8rem;
+        background: linear-gradient(135deg, var(--accent), #818cf8);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 1.8rem;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: var(--text-primary);
+        font-weight: 500;
+        position: relative;
+        padding: 0.3rem 0;
+        transition: var(--transition);
+      }
+
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--accent);
+        border-radius: 2px;
+        transition: var(--transition);
+      }
+
+      .nav-links a:hover {
+        color: var(--accent);
+      }
+
+      .nav-links a:hover::after {
+        width: 100%;
+      }
+
+      .theme-toggle {
+        background: var(--bg-primary);
+        border: 1px solid var(--text-secondary);
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: var(--text-primary);
+        transition: var(--transition);
+      }
+
+      .theme-toggle:hover {
+        transform: rotate(20deg);
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      /* Contenedor principal */
+      .container {
+        display: flex;
+        max-width: 1200px;
+        margin: 90px auto 3rem;
+        padding: 0 2rem;
+        gap: 2.2rem;
+      }
+
+      /* Sidebar */
+      .sidebar {
+        background: var(--bg-secondary);
+        padding: 2.2rem;
+        border-radius: var(--border-radius);
+        width: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+      }
+
+      .profile-pic {
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+        border: 3px solid var(--accent);
+        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+        transition: var(--transition);
+      }
+
+      .profile-pic:hover {
+        transform: scale(1.05);
+        box-shadow: 0 12px 30px rgba(37, 99, 235, 0.4);
+      }
+
+      .profile-pic img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .name {
+        font-size: 1.8rem;
+        font-weight: 800;
+        margin-bottom: 0.3rem;
+        background: linear-gradient(135deg, var(--accent), #818cf8);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .title {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+      }
+
+      .info-item {
+        display: flex;
+        align-items: center;
+        margin: 1rem 0;
+        color: var(--text-primary);
+        font-size: 0.95rem;
+      }
+
+      .info-item i {
+        color: var(--accent);
+        margin-right: 0.8rem;
+        font-size: 1.1rem;
+        min-width: 20px;
+      }
+
+      .social-icons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+      }
+
+      .social-icons a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: var(--bg-primary);
+        border-radius: 50%;
+        color: var(--text-primary);
+        text-decoration: none;
+        font-size: 1.1rem;
+        transition: var(--transition);
+        border: 1px solid var(--text-secondary);
+      }
+
+      .social-icons a:hover {
+        background: var(--accent);
+        color: white;
+        transform: translateY(-4px);
+        border-color: var(--accent);
+      }
+
+      /* Contenido principal */
+      .main-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+      }
+
+      .section {
+        background: var(--bg-secondary);
+        padding: 2.2rem;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.6s forwards;
+      }
+
+      @keyframes fadeInUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Añadir delay a las secciones */
+      .section:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+      .section:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .section:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+      .section:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+      .section:nth-child(5) {
+        animation-delay: 0.5s;
+      }
+
+      .section-title {
+        font-size: 2rem;
+        margin-bottom: 1.4rem;
+        color: var(--text-primary);
+        position: relative;
+        display: inline-block;
+      }
+
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 50px;
+        height: 4px;
+        background: var(--accent);
+        border-radius: 2px;
+      }
+
+      /* Sobre mí */
+      .about-text {
+        font-size: 1.05rem;
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+      }
+
+      /* Habilidades */
+      .skills-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      .skill-item {
+        background-color: #f0f9ff;
+        color: #0369a1;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 500;
+        border: 1px solid #bae6fd;
+        cursor: default;
+      }
+
+      .skill {
+        background: var(--accent-light);
+        padding: 0.6rem 1.3rem;
+        border-radius: 30px;
+        font-size: 0.95rem;
+        color: var(--text-primary);
+        font-weight: 600;
+        transition: var(--transition);
+      }
+
+      .skill:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+      }
+
+      /* Timeline */
+      .timeline {
+        position: relative;
+        padding-left: 30px;
+        margin-top: 1.5rem;
+      }
+
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 8px;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: var(--accent);
+        border-radius: 2px;
+      }
+
+      .timeline-item {
+        position: relative;
+        margin-bottom: 2.2rem;
+        padding-left: 20px;
+      }
+
+      .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: -11px;
+        top: 8px;
+        width: 16px;
+        height: 16px;
+        background: var(--accent);
+        border: 3px solid var(--bg-primary);
+        border-radius: 50%;
+        transition: var(--transition);
+      }
+
+      .date {
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+
+      .job-title {
+        font-size: 1.3rem;
+        margin: 0.4rem 0;
+        color: var(--text-primary);
+      }
+
+      .company {
+        color: var(--text-secondary);
+        font-size: 1.05rem;
+        margin-bottom: 0.8rem;
+      }
+
+      /* Proyectos */
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      .project-card {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+      }
+
+      .project-card:hover {
+        transform: translateY(-2px);
+      }
+
+      .project-title {
+        margin: 0 0 10px;
+        font-size: 18px;
+        color: #1e293b;
+      }
+
+      .project-desc {
+        margin: 0 0 15px;
+        color: #6b7280;
+        line-height: 1.5;
+      }
+
+      .project-link {
+        display: inline-flex;
+        align-items: center;
+        color: #3b82f6;
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .project-link i {
+        margin-left: 5px;
+        transition: transform 0.2s;
+      }
+
+      .project-link:hover i {
+        transform: translateX(3px);
+      }
+
+      /* Contacto */
+      .contact-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+        margin-top: 1rem;
+      }
+
+      .contact-form input,
+      .contact-form textarea {
+        padding: 0.9rem 1.2rem;
+        background: var(--bg-primary);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        color: var(--text-primary);
+        font-size: 1rem;
+        transition: var(--transition);
+      }
+
+      .contact-form input:focus,
+      .contact-form textarea:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+      }
+
+      .contact-form button {
+        background: var(--accent);
+        color: white;
+        border: none;
+        padding: 1rem;
+        font-weight: 600;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: var(--transition);
+        margin-top: 0.5rem;
+      }
+
+      .contact-form button:hover {
+        background: #1d4ed8;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .container {
+          flex-direction: column;
+          padding: 0 1.2rem;
+          margin-top: 85px;
+        }
+
+        .sidebar {
+          width: 100%;
+          margin-bottom: 2rem;
+        }
+
+        .projects-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .nav-links {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body data-theme="light">
+    <!-- Navegación -->
+    <nav>
+      <div class="logo">Portafolio</div>
+      <div class="nav-links">
+        <a href="#about">Sobre mí</a>
+        <a href="#skills">Habilidades</a>
+        <a href="#experience">Experiencia</a>
+        <a href="#projects">Proyectos</a>
+        <a href="#contact">Contacto</a>
+      </div>
+      <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-sun"></i>
+      </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="profile-pic">
+          <img src="img/yo.jpg" alt="" />
+        </div>
+        <strong id="nombre"></strong>
+        <p class="title" id="titulo"></p>
+
+        <div class="info-item">
+          <i class="fas fa-book-open"></i>
+          <p><span id="institucion"></span></p>
+        </div>
+
+        <div class="info-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <p><span id="ubicacion"></span></p>
+        </div>
+        <div class="info-item">
+          <i class="fas fa-envelope"></i>
+          <span id="email"></span>
+        </div>
+
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-github"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+      </aside>
+
+      <!-- Secciones -->
+      <main class="main-content">
+        <section id="about" class="section">
+          <h2 class="section-title">Sobre mí</h2>
+          <p class="about-text" id="descripcion_perfil"></p>
+          <p class="about-text">
+            Fuera del código, disfruto del running, la lectura de ciencia
+            ficción y el café de especialidad.
+          </p>
+        </section>
+
+        <section id="skills" class="section">
+          <h2 class="section-title">Habilidades</h2>
+          <div class="skills-container" id="habilidades-container">
+            <!-- Las habilidades se cargarán aquí dinámicamente -->
+          </div>
+        </section>
+
+        <section id="experience" class="section">
+          <h2 class="section-title">Experiencia</h2>
+          <div class="timeline" id="experiencia-container">
+            <!-- Aquí se generarán los .timeline-item dinámicamente -->
+          </div>
+        </section>
+
+        <section id="projects" class="section">
+          <h2 class="section-title">Proyectos</h2>
+          <div class="projects-grid" id="proyectos-container">
+            <!-- Las tarjetas de proyectos se cargarán aquí dinámicamente -->
+          </div>
+        </section>
+
+        <section id="contact" class="section">
+          <h2 class="section-title">prueba</h2>
+          <form class="contact-form" id="proyectoForm">
+            <input
+              type="text"
+              id="titulo_proyecto"
+              placeholder="Tu nombre"
+              required
+            />
+
+            <textarea
+              rows="5"
+              placeholder="Tu mensaje"
+              id="descripcion_proyecto"
+              required
+            ></textarea>
+            <button type="submit">Enviar mensaje</button>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        getDocs,
+        addDoc, // ← ¡Esta línea faltaba!
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyAEsAPwHOKy7JdkBFum1l_IjJxkK0bgk5Q",
+        authDomain: "portafolio-a71ae.firebaseapp.com",
+        projectId: "portafolio-a71ae",
+        storageBucket: "portafolio-a71ae.firebasestorage.app",
+        messagingSenderId: "8458380488",
+        appId: "1:8458380488:web:60260e473fad61ab4b31fd",
+        measurementId: "G-JXSG2Q5TVF",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      const fotoEl = document.querySelector(".profile-pic img");
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("proyectoForm");
+        if (!form) return;
+
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const titulo_proyecto = document
+            .getElementById("titulo_proyecto")
+            ?.value?.trim();
+          const descripcion_proyecto = document
+            .getElementById("descripcion_proyecto")
+            ?.value?.trim();
+
+          try {
+            await addDoc(collection(db, "proyectos"), {
+              titulo_proyecto,
+              descripcion_proyecto,
+              fecha: new Date(),
+            });
+
+            form.reset();
+            cargarProyectos(); // Recarga los proyectos
+            alert("✅ Proyecto guardado");
+          } catch (err) {
+            console.error("Error:", err);
+            alert("❌ Error: " + err.message);
+          }
+        });
+      });
+
+      async function cargarPerfil() {
+        try {
+          const snapshot = await getDocs(collection(db, "perfil"));
+          const datos = snapshot.docs.map((doc) => doc.data());
+          if (datos.length === 0) return;
+          const p = datos[0];
+
+          const setIf = (id, value) => {
+            const el = document.getElementById(id);
+            if (el && value !== undefined && value !== null)
+              el.textContent = value;
+          };
+
+          setIf("nombre", p.nombre_completo);
+          setIf("titulo", p.titulo);
+          setIf("descripcion_perfil", p.descripcion_perfil);
+          setIf("ubicacion", p.ubicacion);
+          setIf("nacionalidad", p.nacionalidad);
+          setIf("edad", p.edad);
+          setIf("email", p.email);
+
+          if (p.foto_url && p.foto_url !== "ok" && fotoEl)
+            fotoEl.src = p.foto_url;
+        } catch (err) {
+          console.error("Error cargarPerfil:", err);
+        }
+      }
+
+      async function cargarEducacion() {
+        try {
+          const snapshot = await getDocs(collection(db, "educacion"));
+          const datos = snapshot.docs.map((doc) => doc.data());
+          if (datos.length === 0) return;
+          const edu = datos[0];
+
+          const setIf = (id, value) => {
+            const el = document.getElementById(id);
+            if (el && value !== undefined && value !== null)
+              el.textContent = value;
+          };
+
+          setIf("institucion", edu.institucion);
+          setIf("inicio", edu.inicio);
+          setIf("fin", edu.fin);
+          // evita sobreescribir titulo del perfil si no quieres; usa otro id si es necesario
+          setIf("titulo_educacion", edu.titulo);
+        } catch (err) {
+          console.error("Error cargarEducacion:", err);
+        }
+      }
+
+      async function cargarIdioma() {
+        try {
+          const snapshot = await getDocs(collection(db, "idiomas"));
+          const datos = snapshot.docs.map((doc) => doc.data());
+          if (datos.length === 0) return;
+          const idio = datos[0];
+
+          const setIf = (id, value) => {
+            const el = document.getElementById(id);
+            if (el && value !== undefined && value !== null)
+              el.textContent = value;
+          };
+
+          setIf("idioma", idio.idioma);
+          setIf("nivel", idio.nivel);
+          setIf("porcentaje", idio.porcentaje);
+        } catch (err) {
+          console.error("Error cargarIdioma:", err);
+        }
+      }
+
+      //   async function cargarContacto() {
+      //     try {
+      //       const snapshot = await getDocs(collection(db, "contacto"));
+      //       const datos = snapshot.docs.map((doc) => doc.data());
+      //       if (datos.length === 0) return;
+      //       const contact = datos[0];
+
+      //       const setIf = (id, value) => {
+      //         const el = document.getElementById(id);
+      //         if (el && value !== undefined && value !== null)
+      //           el.textContent = value;
+      //       };
+
+      //       setIf("direccion", contact.direccion);
+      //       setIf("email", contact.email);
+      //     } catch (err) {
+      //       console.error("Error cargarIdioma:", err);
+      //     }
+      //   }
+
+      // Declaramos una función asíncrona llamada "cargarHabilidades"
+      // (asíncrona porque va a esperar a que Firebase responda)
+      async function cargarHabilidades() {
+        // Envuelve el código en un bloque "try" para atrapar errores sin romper la página
+        try {
+          // ✅ PASO 1: Pedimos a Firebase todos los documentos de la colección "habilidades"
+          // La respuesta se guarda en una variable llamada "snapshot"
+          const snapshot = await getDocs(collection(db, "habilidades"));
+
+          // ✅ PASO 2: Si no hay ningún documento en la colección, salimos de la función
+          if (snapshot.empty) return;
+
+          // ✅ PASO 3: Buscamos en el HTML el contenedor donde queremos mostrar las habilidades
+          const contenedor = document.getElementById("habilidades-container");
+
+          // ✅ PASO 4: Si no encontramos ese contenedor en el HTML, salimos (evita errores)
+          if (!contenedor) return;
+
+          // ✅ PASO 5: Limpiamos cualquier contenido anterior dentro del contenedor
+          // (por ejemplo, si ya se había cargado algo antes)
+          contenedor.innerHTML = "";
+
+          // ✅ PASO 6: Recorremos cada documento que vino de Firebase
+          // "snapshot.docs" es la lista de documentos
+          // En cada vuelta, "doc" representa un documento individual
+          snapshot.docs.forEach((doc) => {
+            // 🔹 Extraemos los datos reales del documento (lo que pusiste en Firebase)
+            const data = doc.data(); // Ej: { habilidades: "JavaScript" }
+
+            // 🔹 Obtenemos el valor del campo "habilidades"
+            const habilidad = data.habilidades; // Ej: "JavaScript"
+
+            // 🔹 Si el campo está vacío o no existe, saltamos este documento
+            if (!habilidad) return;
+
+            // 🔹 Creamos un nuevo <div> en la memoria del navegador
+            const item = document.createElement("div");
+
+            // 🔹 Le damos una clase CSS para poder darle estilo después
+            item.className = "skill-item";
+
+            // 🔹 Ponemos el nombre de la habilidad dentro del <div> (ej: "JavaScript")
+            item.textContent = habilidad;
+
+            // 🔹 ¡Lo añadimos al contenedor en la página! Ahora se ve en la web
+            contenedor.appendChild(item);
+          });
+
+          // ✅ PASO 7: Si ocurre algún error (ej: sin internet, colección mal escrita...),
+          // lo capturamos aquí y lo mostramos en la consola del navegador
+        } catch (err) {
+          console.error("Error al cargar habilidades:", err);
+          // ⚠️ Nota: corregí el mensaje (decía "experiencia", pero es "habilidades")
+        }
+      }
+
+      async function cargarExperiencia() {
+        try {
+          const snapshot = await getDocs(collection(db, "experiencia"));
+          if (snapshot.empty) return;
+
+          const contenedor = document.getElementById("experiencia-container");
+          if (!contenedor) return;
+
+          // Limpiar contenido anterior
+          contenedor.innerHTML = "";
+
+          // Convertir documentos a array y ordenar (más reciente primero)
+          const experiencias = snapshot.docs.map((doc) => doc.data());
+          experiencias.sort((a, b) => parseInt(b.inicio) - parseInt(a.inicio));
+
+          // Generar un timeline-item por cada experiencia
+          experiencias.forEach((exp) => {
+            const inicio = exp.inicio || "";
+            const fin = exp.fin || "Presente";
+
+            // Crear el div principal del item
+            const item = document.createElement("div");
+            item.className = "timeline-item";
+
+            // Construir el HTML interno
+            item.innerHTML = `
+            <div class="company">${exp.empresa}</div>
+        <div class="date">${inicio} – ${fin}</div>
+        <h3 class="job-title">${exp.puesto || ""}</h3>
+        <p class="description">${exp.descripcion || ""}</p>
+      `;
+
+            contenedor.appendChild(item);
+          });
+        } catch (err) {
+          console.error("Error al cargar experiencia:", err);
+        }
+      }
+
+      async function cargarProyectos() {
+        // Envuelve el código en un bloque "try" para atrapar errores sin romper la página
+        try {
+          // ✅ PASO 1: Pedimos a Firebase todos los documentos de la colección "habilidades"
+          // La respuesta se guarda en una variable llamada "snapshot"
+          const snapshot = await getDocs(collection(db, "proyectos"));
+
+          // ✅ PASO 2: Si no hay ningún documento en la colección, salimos de la función
+          if (snapshot.empty) return;
+
+          const contenedor = document.getElementById("proyectos-container");
+
+          if (!contenedor) return;
+
+          contenedor.innerHTML = "";
+
+          snapshot.docs.forEach((doc) => {
+            const data = doc.data();
+
+            const titulo_proyecto =
+              data.titulo_proyecto || "Proyecto sin título";
+            const descripcion_proyecto =
+              data.descripcion_proyecto || "Sin descripción";
+
+            const item = document.createElement("div");
+            item.className = "project-card";
+
+            item.innerHTML = `
+        <h3 class="project-title">${titulo_proyecto}</h3>
+        <p class="project-desc">${descripcion_proyecto}</p>`;
+
+            contenedor.appendChild(item);
+
+            console.log("Proyecto añadido:", item);
+          });
+        } catch (err) {
+          console.error("Error al cargar proyecto:", err);
+        }
+      }
+
+      cargarPerfil();
+      cargarEducacion();
+      cargarIdioma();
+
+      cargarHabilidades();
+      cargarExperiencia();
+      cargarProyectos();
+    </script>
+
+    <script>
+      // Modo claro/oscuro
+      const toggleBtn = document.getElementById("themeToggle");
+      const body = document.body;
+      const icon = toggleBtn.querySelector("i");
+
+      // Cargar tema guardado
+      const savedTheme = localStorage.getItem("theme") || "light";
+      body.setAttribute("data-theme", savedTheme);
+      updateIcon(savedTheme);
+
+      toggleBtn.addEventListener("click", () => {
+        const currentTheme = body.getAttribute("data-theme");
+        const newTheme = currentTheme === "light" ? "dark" : "light";
+        body.setAttribute("data-theme", newTheme);
+        localStorage.setItem("theme", newTheme);
+        updateIcon(newTheme);
+      });
+
+      function updateIcon(theme) {
+        icon.className = theme === "dark" ? "fas fa-moon" : "fas fa-sun";
+      }
+
+      // Animación suave al hacer clic en los enlaces de navegación
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            window.scrollTo({
+              top: target.offsetTop - 80,
+              behavior: "smooth",
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

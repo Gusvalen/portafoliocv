@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Portafolio</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <style>
+      /* === MISMO ESTILO DE TU PORTAFOLIO (simplificado para admin) === */
+      :root {
+        --bg-primary: #ffffff;
+        --bg-secondary: #f9f9f9;
+        --text-primary: #1a1a1a;
+        --text-secondary: #555555;
+        --accent: #2563eb;
+        --accent-light: #dbeafe;
+        --border-radius: 16px;
+        --shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      }
+
+      [data-theme="dark"] {
+        --bg-primary: #121212;
+        --bg-secondary: #1e1e1e;
+        --text-primary: #f0f0f0;
+        --text-secondary: #a0a0a0;
+        --accent: #60a5fa;
+        --accent-light: #1e293b;
+        --shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.7;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      .admin-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--accent);
+      }
+
+      .admin-header h1 {
+        font-size: 2.2rem;
+        background: linear-gradient(135deg, var(--accent), #818cf8);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .admin-section {
+        background: var(--bg-secondary);
+        padding: 1.8rem;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 1.8rem;
+      }
+
+      .admin-section h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1.2rem;
+        color: var(--text-primary);
+        position: relative;
+        padding-bottom: 0.4rem;
+      }
+
+      .admin-section h2::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 40px;
+        height: 3px;
+        background: var(--accent);
+      }
+
+      .admin-form {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .admin-form label {
+        display: block;
+        margin-bottom: 0.4rem;
+        font-weight: 500;
+      }
+
+      .admin-form input,
+      .admin-form textarea,
+      .admin-form select {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        background: var(--bg-primary);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        color: var(--text-primary);
+        font-size: 1rem;
+      }
+
+      .admin-form button {
+        background: var(--accent);
+        color: white;
+        border: none;
+        padding: 0.9rem;
+        font-weight: 600;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: var(--transition);
+        margin-top: 0.5rem;
+      }
+
+      .admin-form button:hover {
+        background: #1d4ed8;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      }
+
+      /* Estilo para listas de items */
+      .items-list {
+        margin-top: 1.2rem;
+        padding-top: 1.2rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+      }
+
+      .item-card {
+        background: white;
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 0.8rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+
+      .item-text {
+        flex: 1;
+        padding-right: 10px;
+      }
+
+      .delete-btn {
+        background: #fee2e2;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
+        padding: 6px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: var(--transition);
+      }
+
+      .delete-btn:hover {
+        background: #fecaca;
+        transform: scale(1.05);
+      }
+
+      .status {
+        padding: 0.6rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+        text-align: center;
+        font-weight: 500;
+      }
+
+      .status.success {
+        background: #dcfce7;
+        color: #166534;
+      }
+
+      .status.error {
+        background: #fee2e2;
+        color: #b91c1c;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 15px;
+        }
+        .item-card {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+        }
+      }
+    </style>
+  </head>
+  <body data-theme="light">
+    <div class="container">
+      <div class="admin-header">
+        <h1>Panel de Administración</h1>
+        <p>Gestiona el contenido de tu portafolio</p>
+      </div>
+
+      <!-- Perfil (sin eliminación, solo edición) -->
+      <section class="admin-section">
+        <h2>✏️ Editar Perfil</h2>
+        <form id="perfilForm" class="admin-form">
+          <label for="nombre_completo">Nombre completo</label>
+          <input type="text" id="nombre_completo" required />
+          <label for="titulo_perfil">Título profesional</label>
+          <input type="text" id="titulo_perfil" required />
+          <label for="descripcion_perfil">Descripción</label>
+          <textarea id="descripcion_perfil" rows="3" required></textarea>
+          <label for="ubicacion">Ubicación</label>
+          <input type="text" id="ubicacion" required />
+          <label for="email">Email</label>
+          <input type="email" id="email" required />
+          <label for="foto_url">URL de la foto (dejar "ok" si no cambia)</label>
+          <input type="text" id="foto_url" value="ok" required />
+          <button type="submit">Actualizar Perfil</button>
+          <div id="perfilStatus" class="status" style="display: none"></div>
+        </form>
+      </section>
+
+      <!-- Habilidades -->
+      <section class="admin-section">
+        <h2>➕ Agregar Habilidad</h2>
+        <form id="habilidadForm" class="admin-form">
+          <label for="habilidad">Nombre de la habilidad</label>
+          <input
+            type="text"
+            id="habilidad"
+            placeholder="Ej: JavaScript"
+            required
+          />
+          <button type="submit">Agregar Habilidad</button>
+          <div id="habilidadStatus" class="status" style="display: none"></div>
+        </form>
+
+        <!-- Lista de habilidades -->
+        <div class="items-list">
+          <h3>Habilidades actuales:</h3>
+          <div id="habilidadesList"></div>
+        </div>
+      </section>
+
+      <!-- Experiencia -->
+      <section class="admin-section">
+        <h2>➕ Agregar Experiencia</h2>
+        <form id="experienciaForm" class="admin-form">
+          <label for="empresa">Empresa</label>
+          <input type="text" id="empresa" required />
+          <label for="puesto">Puesto</label>
+          <input type="text" id="puesto" required />
+          <label for="inicio_exp">Año de inicio</label>
+          <input type="text" id="inicio_exp" placeholder="2020" required />
+          <label for="fin_exp">Año de fin (o "Presente")</label>
+          <input type="text" id="fin_exp" placeholder="2024" />
+          <label for="descripcion_exp">Descripción</label>
+          <textarea id="descripcion_exp" rows="3" required></textarea>
+          <button type="submit">Agregar Experiencia</button>
+          <div
+            id="experienciaStatus"
+            class="status"
+            style="display: none"
+          ></div>
+        </form>
+
+        <!-- Lista de experiencias -->
+        <div class="items-list">
+          <h3>Experiencias actuales:</h3>
+          <div id="experienciasList"></div>
+        </div>
+      </section>
+
+      <!-- Proyectos -->
+      <section class="admin-section">
+        <h2>➕ Agregar Proyecto</h2>
+        <form id="proyectoForm" class="admin-form">
+          <label for="titulo_proyecto">Título del proyecto</label>
+          <input type="text" id="titulo_proyecto" required />
+          <label for="descripcion_proyecto">Descripción</label>
+          <textarea id="descripcion_proyecto" rows="3" required></textarea>
+          <button type="submit">Agregar Proyecto</button>
+          <div id="proyectoStatus" class="status" style="display: none"></div>
+        </form>
+
+        <!-- Lista de proyectos -->
+        <div class="items-list">
+          <h3>Proyectos actuales:</h3>
+          <div id="proyectosList"></div>
+        </div>
+      </section>
+    </div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+        getDocs,
+        doc,
+        setDoc,
+        deleteDoc,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+      // 🔑 Tu configuración de Firebase
+      const firebaseConfig = {
+        apiKey: "AIzaSyAEsAPwHOKy7JdkBFum1l_IjJxkK0bgk5Q",
+        authDomain: "portafolio-a71ae.firebaseapp.com",
+        projectId: "portafolio-a71ae",
+        storageBucket: "portafolio-a71ae.firebasestorage.app",
+        messagingSenderId: "8458380488",
+        appId: "1:8458380488:web:60260e473fad61ab4b31fd",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      // ✨ Función para mostrar mensajes
+      function showStatus(id, message, isSuccess = true) {
+        const el = document.getElementById(id);
+        el.textContent = message;
+        el.className = `status ${isSuccess ? "success" : "error"}`;
+        el.style.display = "block";
+        setTimeout(() => {
+          el.style.display = "none";
+        }, 4000);
+      }
+
+      // 🧹 Función para renderizar listas
+      async function renderLists() {
+        // Habilidades
+        const habilidadesSnap = await getDocs(collection(db, "habilidades"));
+        const habilidadesList = document.getElementById("habilidadesList");
+        habilidadesList.innerHTML = "";
+        habilidadesSnap.docs.forEach((doc) => {
+          const data = doc.data();
+          const div = document.createElement("div");
+          div.className = "item-card";
+          div.innerHTML = `
+          <div class="item-text">${data.habilidades || "Sin nombre"}</div>
+          <button class="delete-btn" data-id="${
+            doc.id
+          }" data-collection="habilidades">Eliminar</button>
+        `;
+          habilidadesList.appendChild(div);
+        });
+
+        // Experiencia
+        const experienciaSnap = await getDocs(collection(db, "experiencia"));
+        const experienciaList = document.getElementById("experienciasList");
+        experienciaList.innerHTML = "";
+        experienciaSnap.docs.forEach((doc) => {
+          const data = doc.data();
+          const div = document.createElement("div");
+          div.className = "item-card";
+          div.innerHTML = `
+          <div class="item-text">
+            <strong>${data.puesto || "Puesto"}</strong> en ${
+            data.empresa || "Empresa"
+          }
+            (${data.inicio || "?"} – ${data.fin || "Presente"})
+          </div>
+          <button class="delete-btn" data-id="${
+            doc.id
+          }" data-collection="experiencia">Eliminar</button>
+        `;
+          experienciaList.appendChild(div);
+        });
+
+        // Proyectos
+        const proyectosSnap = await getDocs(collection(db, "proyectos"));
+        const proyectosList = document.getElementById("proyectosList");
+        proyectosList.innerHTML = "";
+        proyectosSnap.docs.forEach((doc) => {
+          const data = doc.data();
+          const div = document.createElement("div");
+          div.className = "item-card";
+          div.innerHTML = `
+          <div class="item-text">
+            <strong>${data.titulo_proyecto || "Sin título"}</strong>
+          </div>
+          <button class="delete-btn" data-id="${
+            doc.id
+          }" data-collection="proyectos">Eliminar</button>
+        `;
+          proyectosList.appendChild(div);
+        });
+
+        // Añadir eventos a los botones de eliminar
+        document.querySelectorAll(".delete-btn").forEach((btn) => {
+          btn.addEventListener("click", async (e) => {
+            const id = e.target.getAttribute("data-id");
+            const collectionName = e.target.getAttribute("data-collection");
+
+            if (confirm("¿Seguro que deseas eliminar este item?")) {
+              try {
+                await deleteDoc(doc(db, collectionName, id));
+                showStatus(
+                  `${collectionName}Status`,
+                  `✅ Eliminado correctamente`
+                );
+                renderLists(); // Actualizar listas
+              } catch (err) {
+                console.error(err);
+                showStatus(
+                  `${collectionName}Status`,
+                  `❌ Error al eliminar`,
+                  false
+                );
+              }
+            }
+          });
+        });
+      }
+
+      // 📝 Actualizar Perfil
+      document
+        .getElementById("perfilForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          try {
+            const data = {
+              nombre_completo: document.getElementById("nombre_completo").value,
+              titulo: document.getElementById("titulo_perfil").value,
+              descripcion_perfil:
+                document.getElementById("descripcion_perfil").value,
+              ubicacion: document.getElementById("ubicacion").value,
+              email: document.getElementById("email").value,
+              foto_url: document.getElementById("foto_url").value,
+            };
+            await setDoc(doc(db, "perfil", "id_perfil"), data);
+            showStatus("perfilStatus", "✅ Perfil actualizado");
+            document.getElementById("perfilForm").reset();
+            document.getElementById("foto_url").value = "ok";
+          } catch (err) {
+            console.error(err);
+            showStatus("perfilStatus", "❌ Error al actualizar", false);
+          }
+        });
+
+      // ➕ Agregar Habilidad
+      document
+        .getElementById("habilidadForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          try {
+            const habilidad = document.getElementById("habilidad").value;
+            await addDoc(collection(db, "habilidades"), {
+              habilidades: habilidad,
+            });
+            showStatus("habilidadStatus", "✅ Habilidad agregada");
+            document.getElementById("habilidadForm").reset();
+            renderLists(); // Actualizar lista
+          } catch (err) {
+            console.error(err);
+            showStatus("habilidadStatus", "❌ Error al agregar", false);
+          }
+        });
+
+      // ➕ Agregar Experiencia
+      document
+        .getElementById("experienciaForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          try {
+            const data = {
+              empresa: document.getElementById("empresa").value,
+              puesto: document.getElementById("puesto").value,
+              inicio: document.getElementById("inicio_exp").value,
+              fin: document.getElementById("fin_exp").value || "Presente",
+              descripcion: document.getElementById("descripcion_exp").value,
+            };
+            await addDoc(collection(db, "experiencia"), data);
+            showStatus("experienciaStatus", "✅ Experiencia agregada");
+            document.getElementById("experienciaForm").reset();
+            renderLists(); // Actualizar lista
+          } catch (err) {
+            console.error(err);
+            showStatus("experienciaStatus", "❌ Error al agregar", false);
+          }
+        });
+
+      // ➕ Agregar Proyecto
+      document
+        .getElementById("proyectoForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          try {
+            const data = {
+              titulo_proyecto: document.getElementById("titulo_proyecto").value,
+              descripcion_proyecto: document.getElementById(
+                "descripcion_proyecto"
+              ).value,
+            };
+            await addDoc(collection(db, "proyectos"), data);
+            showStatus("proyectoStatus", "✅ Proyecto agregado");
+            document.getElementById("proyectoForm").reset();
+            renderLists(); // Actualizar lista
+          } catch (err) {
+            console.error(err);
+            showStatus("proyectoStatus", "❌ Error al agregar", false);
+          }
+        });
+
+      // 🔄 Cargar listas al inicio
+      renderLists();
+    </script>
+  </body>
+</html>
